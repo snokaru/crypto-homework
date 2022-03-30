@@ -1,2 +1,4 @@
 all:
-	gcc -I./ -o main main.c polybius.c hill.c caesar-cryptanalysis.c
+	gcc -I./ -o main main.c vigenere.c vigenere-cryptanalysis.c
+
+

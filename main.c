@@ -3,53 +3,39 @@
 #include "polybius.h"
 #include "caesar-cryptanalysis.h"
 #include "hill.h"
+#include "vigenere.h"
+#include "vigenere-cryptanalysis.h"
 
-void test_caesar() {
-    char *test = "the quick brown fox jumps over the lazy dog";
-    int *encoded, len;
-    char** permutations = caesar_generate_all_permutations(test, &len);
-    for (int i = 0; i < len; ++i) {
-        printf("%s\n", permutations[i]);
-    }
 
-    for (int i = 0; i < len; ++i) {
-        free(permutations[i]);
-    }
-    free(permutations);
+void test_vigenere() {
+    char* original = "this is an example of the vigenere cipher";
+    char* key = "vector";
+    printf("original: %s\n", original);
+
+    char* encrypted = vigenere_encrypt(original, key);
+    printf("encrypted: %s\n", encrypted);
+
+    char* decrypted = vigenere_decrypt(original, key);
+    printf("decrpyed: %s\n", decrypted);
 }
 
-void test_polybius() {
-    int len;
-    printf("original: %s\n", "short example");
-    int* encoded = polybius_encode("short example", &len);
-    printf("encoded: ");
+void test_vigenere_cryptanalysis() {
+    char* original = "vptnvffuntshtarptymjwzirappljmhhqvsubwlzzygvtyitarptyiougxiuydtgzhhvvmumshwkzgstfmekvmpkswdgbilvjljmglmjfqwioiivknulvvfemioiemojtywdsajtwmtcgluysdsumfbieugmvalvxkjduetukatymvkqzhvqvgvptytjwwldyeevquhlulwpkt";
+    int len = 0;
+    printf("original: %s\n", original);
+    char** keys = vigenere_generate_most_likely_keys(original, &len);
     for (int i = 0; i < len; ++i) {
-        printf("%d ", encoded[i]);
+        printf("possible key: %s\n", keys[i]);
+        char* possible_decryption = vigenere_decrypt(original, keys[i]);
+        printf("possible decryption: %s\n", possible_decryption);
+        free(possible_decryption);
     }
-    printf("\n");
-
-    char* decoded = polybius_decode(encoded, len);
-    printf("decoded: %s\n", decoded);
-    free(encoded);
-    free(decoded);
-}
-
-void test_hill() {
-    printf("original: %s\n", "short example");
-    char* encoded = hill_encode("short example", "hill", 2);
-    printf("encoded: %s\n", encoded);
-    char* decoded = hill_decode(encoded, "hill", 2);
-    printf("decoded: %s\n", decoded);
-    free(encoded);
-    free(decoded);
 }
 
 int main(void) {
-    printf("polybius\n");
-    test_polybius();
-    printf("\nhill\n");
-    test_hill();
-    printf("\ncaesar\n");
-    test_caesar();
+    printf("Running vigenere test...\n");
+    test_vigenere();
+    printf("\nRunning vigenere cryptanalysis test...\n");
+    test_vigenere_cryptanalysis();
 }
 

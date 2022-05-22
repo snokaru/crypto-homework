@@ -1,4 +1,4 @@
 all:
-	gcc -I./ -o main main.c vigenere.c vigenere-cryptanalysis.c
+	gcc -I./ -o main main.c sha256.c
 
 
